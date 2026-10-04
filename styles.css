@@ -215,7 +215,7 @@ h2 em {
     rgba(124, 58, 237, 0.25),
     rgba(16, 15, 42, 0.72)
   );
-  border-radius: 156px 156px 18px 18px;
+  border-radius: 32px;
   position: relative;
   z-index: 2;
   overflow: hidden;
@@ -1659,6 +1659,10 @@ body {
   transform: translateY(-3px);
 }
 body.light .avatar-card {
+  background:
+    radial-gradient(ellipse at 52% 34%, rgba(157, 133, 219, 0.15), transparent 48%),
+    linear-gradient(150deg, #f2effb 0%, #e4e0f0 100%);
+  border-color: rgba(101, 80, 156, 0.22);
   box-shadow:
     0 28px 65px rgba(93, 55, 178, 0.22),
     inset 0 1px white;
@@ -2165,8 +2169,10 @@ h2 em {
   transform: scale(1.01);
 }
 .avatar-card {
-  background: #ded3c5;
-  border-color: rgba(255, 255, 255, 0.38);
+  background:
+    radial-gradient(ellipse at 52% 34%, rgba(137, 104, 204, 0.24), transparent 48%),
+    linear-gradient(150deg, #211d39 0%, #101322 100%);
+  border-color: rgba(199, 184, 255, 0.38);
   box-shadow: 0 26px 72px rgba(5, 7, 20, 0.3);
 }
 .avatar-card:after {
