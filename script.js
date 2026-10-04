@@ -89,6 +89,20 @@ themeButton.addEventListener('click', () => {
 
 /* ---------- Pointer effects (mouse devices only) ---------- */
 if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const heroArt = $('.hero-art');
+  if (heroArt) {
+    heroArt.addEventListener('pointermove', event => {
+      const box = heroArt.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width - 0.5;
+      const y = (event.clientY - box.top) / box.height - 0.5;
+      heroArt.style.setProperty('--world-tilt-x', `${(x * 7).toFixed(2)}deg`);
+      heroArt.style.setProperty('--world-tilt-y', `${(-y * 7).toFixed(2)}deg`);
+    });
+    heroArt.addEventListener('pointerleave', () => {
+      heroArt.style.setProperty('--world-tilt-x', '0deg');
+      heroArt.style.setProperty('--world-tilt-y', '0deg');
+    });
+  }
   // Uses the separate `translate` property so :hover transforms keep working.
   $$('.primary, .circle-link, .nav-cta').forEach(el => {
     el.addEventListener('pointermove', event => {
