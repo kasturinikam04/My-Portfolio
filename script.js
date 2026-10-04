@@ -54,49 +54,22 @@ document.addEventListener('click', e => { if (!header.contains(e.target)) setMen
 const topButton = $('.to-top');
 const progress = $('.reading-line span');
 const roomSections = $$('.room-section');
-const roomMotionReduced = matchMedia('(prefers-reduced-motion: reduce)');
 const roomStage = $('main');
 roomStage?.classList.add('room-stage');
-let roomFrame = 0;
-function updateRoomDepth() {
-  roomFrame = 0;
-  const viewportCenter = innerHeight * 0.52;
-  roomSections.forEach(section => {
-    if (roomMotionReduced.matches) {
-      section.style.setProperty('--room-y', '0px');
-      section.style.setProperty('--room-angle', '0deg');
-      section.style.setProperty('--room-z', '0px');
-      section.style.setProperty('--room-scale', '1');
-      section.style.setProperty('--room-opacity', '1');
-      section.style.setProperty('--room-softness', '0px');
-      section.classList.add('room-active');
-      return;
-    }
-    const rect = section.getBoundingClientRect();
-    const signedDistance = (rect.top + rect.height * 0.5 - viewportCenter) / innerHeight;
-    const distance = Math.abs(signedDistance);
-    const proximity = Math.max(0, Math.min(1, 1 - distance / 1.15));
-    const ease = proximity * proximity * (3 - 2 * proximity);
-    section.style.setProperty('--room-y', `${(36 * signedDistance).toFixed(1)}px`);
-    section.style.setProperty('--room-angle', `${(Math.max(-1, Math.min(1, signedDistance)) * 7).toFixed(2)}deg`);
-    section.style.setProperty('--room-z', `${(-380 * (1 - ease)).toFixed(1)}px`);
-    section.style.setProperty('--room-scale', (0.76 + 0.24 * ease).toFixed(3));
-    section.style.setProperty('--room-opacity', (0.16 + 0.84 * ease).toFixed(3));
-    section.style.setProperty('--room-softness', `${(1.8 * (1 - ease)).toFixed(2)}px`);
-    section.classList.toggle('room-active', ease > 0.12);
-  });
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const roomObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('room-active');
+    roomObserver.unobserve(entry.target);
+  }), { rootMargin: '-14% 0px -14% 0px', threshold: 0.08 });
+  roomSections.forEach(section => roomObserver.observe(section));
+} else {
+  roomSections.forEach(section => section.classList.add('room-active'));
 }
-function scheduleRoomDepth() {
-  if (!roomFrame) roomFrame = requestAnimationFrame(updateRoomDepth);
-}
-scheduleRoomDepth();
-addEventListener('resize', scheduleRoomDepth, { passive: true });
-roomMotionReduced.addEventListener?.('change', scheduleRoomDepth);
 addEventListener('scroll', () => {
   topButton.classList.toggle('show', scrollY > 500);
   const height = document.documentElement.scrollHeight - innerHeight;
   progress.style.width = `${height ? (scrollY / height) * 100 : 0}%`;
-  scheduleRoomDepth();
 }, { passive: true });
 
 const navLinks = $$('nav a:not(.nav-cta)');
