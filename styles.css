@@ -2335,11 +2335,14 @@ body.light .beliefs {
 
 /* Portrait: slight zoom hides dark edges. Tweak --photo-zoom (1 = no zoom) */
 .avatar-card {
-  --photo-zoom: 1.1;
+  --photo-zoom: 1;
 }
 .profile-photo {
   transform: scale(var(--photo-zoom));
   transform-origin: 50% 40%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  filter: grayscale(1) contrast(1.04) drop-shadow(0 8px 14px rgba(38, 29, 86, .28));
 }
 
 /* Scroll reveal (only when JS is running) */
