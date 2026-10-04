@@ -2420,6 +2420,8 @@ body.light .tags span {
 /* Show the supplied live product screenshots in the project previews. */
 .project-visual.eduguide,
 .project-visual.chronova {
+  height: auto;
+  aspect-ratio: 19 / 9;
   padding: 0;
   background: var(--card);
 }
@@ -2427,8 +2429,8 @@ body.light .tags span {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  object-fit: contain;
+  object-position: center;
 }
 /* Keep the focus tags readable when the light-mode text override is active. */
 body.light .interest-chips span:hover {
