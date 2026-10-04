@@ -435,7 +435,7 @@ h2 em {
 }
 .achievement-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 13px;
 }
 .achievement {
@@ -505,7 +505,7 @@ h2 em {
   font-size: 20px;
 }
 .achievement.wide {
-  grid-column: span 3;
+  grid-column: span 4;
   min-height: 136px;
   display: flex;
   align-items: center;
@@ -1798,7 +1798,10 @@ body.light .project-visual {
     gap: 52px;
   }
   .achievement-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .achievement.wide {
+    grid-column: span 2;
   }
   .achievement {
     min-height: 235px;
