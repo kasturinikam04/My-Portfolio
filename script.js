@@ -82,22 +82,16 @@ if ('IntersectionObserver' in window) {
   sections.forEach(section => sectionObserver.observe(section));
 }
 
-/* ---------- Theme (safe if storage is blocked) ---------- */
-const THEME_KEY = 'kasturi-theme';
-const store = {
-  get() { try { return localStorage.getItem(THEME_KEY); } catch { return null; } },
-  set(value) { try { localStorage.setItem(THEME_KEY, value); } catch { /* storage unavailable */ } }
-};
+/* ---------- Theme ---------- */
 const themeButton = $('.theme-toggle');
 function setTheme(light) {
   document.body.classList.toggle('light', light);
   themeButton.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
 }
-setTheme(store.get() === 'light');
+setTheme(false);
 themeButton.addEventListener('click', () => {
   const light = !document.body.classList.contains('light');
   setTheme(light);
-  store.set(light ? 'light' : 'dark');
 });
 
 /* ---------- Pointer effects (mouse devices only) ---------- */
