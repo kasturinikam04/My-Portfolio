@@ -2417,6 +2417,26 @@ body.light .tags span {
   border-color: var(--line);
 }
 
+/* Show the supplied live product screenshots in the project previews. */
+.project-visual.eduguide,
+.project-visual.chronova {
+  padding: 0;
+  background: var(--card);
+}
+.project-visual > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+/* Keep the focus tags readable when the light-mode text override is active. */
+body.light .interest-chips span:hover {
+  color: #fff;
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
 /* Project status text (was CSS-generated) */
 .project-info > p.project-status {
   font:
