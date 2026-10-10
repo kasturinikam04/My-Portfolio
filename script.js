@@ -34,7 +34,7 @@ function watch(selector, className, options) {
   }), options);
   els.forEach(el => io.observe(el));
 }
-watch('.reveal', 'visible', { threshold: 0, rootMargin: '0px 0px -6% 0px' });
+watch('.reveal', 'visible', { threshold: 0, rootMargin: '45% 0px 45% 0px' });
 watch('.project, .achievement-grid', 'built', { threshold: 0.25 });
 
 /* ---------- Mobile menu ---------- */
@@ -71,6 +71,9 @@ const clampScene = value => Math.max(0, Math.min(1, value));
 const sceneProgress = new Map(scenes.map(section => [section, 0]));
 let sceneFrame = 0;
 let activeSceneIndex = -1;
+let previousSceneScrollY = scrollY;
+let previousSceneScrollTime = performance.now();
+let fastSceneScrollUntil = 0;
 function updateScenes() {
   sceneFrame = 0;
   if (reducedMotion.matches) return;
@@ -94,9 +97,10 @@ function updateScenes() {
   // Read every section before writing styles, then ease toward the scroll pose.
   let needsAnotherFrame = false;
   let nearest = targets[0];
+  const easing = performance.now() < fastSceneScrollUntil ? 0.56 : 0.24;
   targets.forEach(({ section, index, target, distance }) => {
     const current = sceneProgress.get(section) ?? target;
-    const next = current + (target - current) * 0.24;
+    const next = current + (target - current) * easing;
     const settled = Math.abs(target - next) < 0.002;
     const progressValue = settled ? target : next;
     sceneProgress.set(section, progressValue);
@@ -132,7 +136,16 @@ function updateScenes() {
 function requestSceneUpdate() {
   if (!sceneFrame && !reducedMotion.matches) sceneFrame = requestAnimationFrame(updateScenes);
 }
-addEventListener('scroll', requestSceneUpdate, { passive: true });
+function handleSceneScroll() {
+  const now = performance.now();
+  const elapsed = Math.max(16, now - previousSceneScrollTime);
+  const speed = Math.abs(scrollY - previousSceneScrollY) / elapsed;
+  if (speed > 1.2) fastSceneScrollUntil = now + 260;
+  previousSceneScrollY = scrollY;
+  previousSceneScrollTime = now;
+  requestSceneUpdate();
+}
+addEventListener('scroll', handleSceneScroll, { passive: true });
 addEventListener('resize', requestSceneUpdate, { passive: true });
 reducedMotion.addEventListener?.('change', () => {
   if (reducedMotion.matches) {
