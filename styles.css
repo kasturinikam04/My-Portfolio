@@ -2765,3 +2765,48 @@ body.light .contact-card:hover {
     min-height: 120px;
   }
 }
+
+/* Mobile-first readability and layout; desktop scene motion stays unchanged. */
+@media (max-width: 760px) {
+  .scene-chapter {
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto !important;
+  }
+  .js .reveal:not(.visible) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .world-stage,
+  body.light .world-stage {
+    opacity: .2;
+  }
+  .world-stage__meta > span:first-child {
+    display: none;
+  }
+  .world-stage__portal {
+    opacity: .16;
+  }
+  .hero-copy { order: 0; }
+  .hero-art { order: 1; }
+  .project-visual.eduguide,
+  .project-visual.chronova {
+    aspect-ratio: 16 / 10;
+  }
+  .project-visual > img {
+    object-fit: contain;
+  }
+  .focus-grid > p { font-size: 16px; }
+  .timeline p { font-size: 14px; }
+  .section-label { font-size: 10px; }
+}
+@media (max-width: 420px) {
+  .section { width: calc(100% - 32px); }
+  .hero { padding-top: 28px; padding-bottom: 64px; }
+  .hero h1 { font-size: clamp(43px, 14vw, 50px); }
+  .hero-art { height: 300px; }
+  .avatar-card,
+  .hero-art:hover .avatar-card { transform: scale(.76) !important; }
+  .project-visual.eduguide,
+  .project-visual.chronova { aspect-ratio: 3 / 2; }
+}
