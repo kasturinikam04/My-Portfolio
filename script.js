@@ -35,7 +35,7 @@ function watch(selector, className, options) {
   els.forEach(el => io.observe(el));
 }
 watch('.reveal', 'visible', { threshold: 0, rootMargin: '45% 0px 45% 0px' });
-watch('.project, .achievement-grid', 'built', { threshold: 0.25 });
+watch('.project, .achievement-grid', 'built', { threshold: 0, rootMargin: '28% 0px 28% 0px' });
 
 /* ---------- Mobile menu ---------- */
 const header = $('.nav');
@@ -54,6 +54,38 @@ document.addEventListener('click', e => { if (!header.contains(e.target)) setMen
 const topButton = $('.to-top');
 const progress = $('.reading-line span');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------- Cinematic first-entry intro ---------- */
+const intro = $('.intro-sequence');
+const introSkip = $('.intro-skip', intro || document);
+let introSeen = false;
+try { introSeen = sessionStorage.getItem('kasturi-portfolio-intro-seen') === '1'; } catch {}
+if (intro && !introSeen && !reducedMotion.matches) {
+  document.body.classList.add('intro-running');
+  let introFinished = false;
+  let introTimer;
+  const finishIntro = () => {
+    if (introFinished) return;
+    introFinished = true;
+    clearTimeout(introTimer);
+    try { sessionStorage.setItem('kasturi-portfolio-intro-seen', '1'); } catch {}
+    intro.classList.add('is-leaving');
+    intro.setAttribute('aria-hidden', 'true');
+    setTimeout(() => {
+      intro.remove();
+      document.body.classList.remove('intro-running');
+    }, 550);
+    removeEventListener('keydown', handleIntroKey);
+  };
+  const handleIntroKey = event => {
+    if (event.key === 'Escape' || event.key === 'Enter') finishIntro();
+  };
+  introSkip?.addEventListener('click', finishIntro);
+  addEventListener('keydown', handleIntroKey);
+  introTimer = setTimeout(finishIntro, 2200);
+} else {
+  intro?.remove();
+}
 
 /* ---------- Lightweight comet cursor trail (mouse / pen only) ---------- */
 if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reducedMotion.matches) {
